@@ -1,5 +1,7 @@
 package main
 
+// 从本地/etc/resolve.conf获取nameserver
+
 import (
 	"fmt"
 	"log"
@@ -16,4 +18,3 @@ func main() {
 	servers := clientConfig.Servers
 	fmt.Printf("local dns servers: %+v\n", servers)
 }
-
