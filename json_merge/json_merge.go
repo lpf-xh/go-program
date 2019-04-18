@@ -1,5 +1,7 @@
 package main
 
+// 对多条json中的key进行去重合并，value不做特殊处理。
+
 import (
 	"encoding/json"
 	"flag"
