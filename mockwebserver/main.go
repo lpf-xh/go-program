@@ -9,14 +9,14 @@ import (
 )
 
 var (
-	code     = 200
-	resptime time.Duration // ms
+	respCode = 200
+	respTime time.Duration // ms
 )
 
 func main() {
 	http.HandleFunc("/test", testHandle)
-	http.HandleFunc("/setCode", codeHandle)
-	http.HandleFunc("/setResptime", resptimeHandle)
+	http.HandleFunc("/setRespCode", codeHandle)
+	http.HandleFunc("/setRespTime", resptimeHandle)
 
 	log.Println("mockcache is running at :80")
 
@@ -26,10 +26,10 @@ func main() {
 }
 
 func testHandle(w http.ResponseWriter, r *http.Request) {
-	if resptime > 0 {
-		time.Sleep(time.Millisecond * resptime)
+	if respTime > 0 {
+		time.Sleep(time.Millisecond * respTime)
 	}
-	w.WriteHeader(code)
+	w.WriteHeader(respCode)
 }
 
 func codeHandle(w http.ResponseWriter, r *http.Request) {
@@ -38,15 +38,15 @@ func codeHandle(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
-	code = v
+	respCode = v
 }
 
 func resptimeHandle(w http.ResponseWriter, r *http.Request) {
-	v, err := strconv.Atoi(r.FormValue("resptime"))
+	v, err := strconv.Atoi(r.FormValue("time"))
 	if err != nil {
 		log.Println(err)
 	}
 
-	resptime = time.Duration(v)
+	respTime = time.Duration(v)
 }
 

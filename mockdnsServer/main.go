@@ -11,13 +11,13 @@ import (
 )
 
 var (
-	rcode    int
-	resptime time.Duration
+	respCode    int
+	respTime time.Duration
 )
 
 func main() {
 	go func() {
-		http.HandleFunc("/setRcode", rcodeHandle)
+		http.HandleFunc("/setRcode", respCodeHandle)
 		http.HandleFunc("/setResptime", resptimeHandle)
 		log.Println("mockdns http is running at :8053")
 		log.Panic(http.ListenAndServe(":10053", nil))
@@ -32,27 +32,27 @@ func main() {
 	select {}
 }
 
-func rcodeHandle(w http.ResponseWriter, r *http.Request) {
+func respCodeHandle(w http.ResponseWriter, r *http.Request) {
 	v, err := strconv.Atoi(r.FormValue("code"))
 	if err != nil {
 		log.Println(err)
 	}
 
-	rcode = v
+	respCode = v
 }
 
 func resptimeHandle(w http.ResponseWriter, r *http.Request) {
-	v, err := strconv.Atoi(r.FormValue("resptime"))
+	v, err := strconv.Atoi(r.FormValue("time"))
 	if err != nil {
 		log.Println(err)
 	}
 
-	resptime = time.Duration(v)
+	respTime = time.Duration(v)
 }
 
 func dnsReply(w dns.ResponseWriter, req *dns.Msg) {
-	if resptime > 0 {
-		time.Sleep(resptime * time.Millisecond)
+	if respTime > 0 {
+		time.Sleep(respTime * time.Millisecond)
 	}
 
 	a := &dns.A{}
@@ -64,7 +64,7 @@ func dnsReply(w dns.ResponseWriter, req *dns.Msg) {
 	a.A = net.ParseIP("2.0.1.9")
 
 	res := *req
-	res.Rcode = rcode
+	res.Rcode = respCode
 	res.Answer = append(res.Answer, a)
 
 	w.WriteMsg(&res)
