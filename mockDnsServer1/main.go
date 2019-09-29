@@ -17,7 +17,7 @@ var (
 
 func main() {
 	go func() {
-		http.HandleFunc("/setRcode", respCodeHandle)
+		http.HandleFunc("/setRcode", respcodeHandle)
 		http.HandleFunc("/setResptime", resptimeHandle)
 		log.Println("mockdns http is running at :8053")
 		log.Panic(http.ListenAndServe(":10053", nil))
@@ -32,7 +32,7 @@ func main() {
 	select {}
 }
 
-func respCodeHandle(w http.ResponseWriter, r *http.Request) {
+func respcodeHandle(w http.ResponseWriter, r *http.Request) {
 	v, err := strconv.Atoi(r.FormValue("code"))
 	if err != nil {
 		log.Println(err)
